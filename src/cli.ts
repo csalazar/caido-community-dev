@@ -1,8 +1,21 @@
 #!/usr/bin/env node
 import { Command } from 'commander';
 import { build } from './commands';
+import chalk from 'chalk';
 
 const program = new Command();
+
+function runner(fn: (...args: any[]) => Promise<void>) {
+    return async (...args: any[]) => {
+        try {
+            await fn(...args);
+        } catch (error) {
+            const buildError = error instanceof Error ? error : new Error('Unknown error occurred');
+            console.error(chalk.red(`\n${buildError.message}`));
+            process.exit(1);
+        }
+    }
+}
 
 program
   .name('caido-dev')
@@ -10,15 +23,21 @@ program
   .version('1.0.0');
 
 program
-  .command('build')
+  .command('build [path]')
   .description('Build the Caido plugin')
   .option('-c, --config <path>', 'Path to caido.config.ts file')
-  .action(build);
+  .action(runner((path, args) => build({ path, ...args })));
 
 program
   .command('dev')
   .description('Start development server')
-  .option('-c, --config <path>', 'Path to caido.config.ts file')
+    .option('-c, --config <path>', 'Path to caido.config.ts file')
   .action(() => {});
 
-program.parse(); 
+try {
+  program.parse(); 
+} catch (error) {
+    const buildError = error instanceof Error ? error : new Error('Unknown error occurred');
+    console.error(chalk.red(`\n${buildError.message}`));
+    process.exit(1);
+}

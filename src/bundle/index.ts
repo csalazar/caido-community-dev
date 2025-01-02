@@ -5,11 +5,11 @@ import { createManifest, defineFrontendPluginManifest } from '../manifest';
 import { RootPackageJson } from '../package';
 import { BuildOutput } from '../types';
 import JSZip from 'jszip';
-import { addDirectoryToZip } from '../utils';
+import { addDirectoryToZip, logInfo } from '../utils';
 import { bundleFrontendPlugin } from './frontend';
 
-async function createDistDirectories() {
-  const distDir = path.resolve(process.cwd(), 'dist');
+async function createDistDirectories(cwd: string) {
+  const distDir = path.resolve(cwd, 'dist');
   await fs.rm(distDir, { recursive: true, force: true });
 
   const pluginPackageDir = path.join(distDir, 'plugin_package');
@@ -19,13 +19,15 @@ async function createDistDirectories() {
 }
 
 export async function bundlePackage(options: {
+    cwd: string,
     packageJson: RootPackageJson,
     buildOutputs: BuildOutput[]
 }): Promise<void> {
-  const { packageJson, buildOutputs } = options;
+  logInfo('Bundling plugin package');
+  const { cwd, packageJson, buildOutputs } = options;
 
   // Create dist directories
-  const { distDir, pluginPackageDir } = await createDistDirectories();
+  const { distDir, pluginPackageDir } = await createDistDirectories(cwd);
 
   // Create manifest
   const manifest = createManifest({ packageJson });

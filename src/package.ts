@@ -24,8 +24,8 @@ export type PluginPackageJson = z.infer<typeof PluginPackageJsonSchema>;
  * Loads the package.json file from the current working directory
  * @returns The parsed and validated package.json contents or null if not found
  */
-export function getRootPackageJson(): RootPackageJson {
-    const packagePath = join(process.cwd(), 'package.json');
+export function getRootPackageJson(cwd: string): RootPackageJson {
+    const packagePath = join(cwd, 'package.json');
     
     if (existsSync(packagePath)) {
         try {

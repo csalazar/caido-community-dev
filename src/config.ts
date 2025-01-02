@@ -1,6 +1,7 @@
 import path from 'path';
 import { createJiti } from 'jiti';
 import { z } from 'zod';
+import { logInfo } from './utils';
 
 const DEFAULT_CONFIG_FILE = 'caido.config.ts';
 
@@ -53,8 +54,9 @@ export type WorkflowPluginConfig = z.infer<typeof workflowPluginConfigSchema>;
 export type DevConfig = z.infer<typeof devConfigSchema>;
 export type CaidoConfig = z.infer<typeof caidoConfigSchema>; 
 
-export async function loadConfig(configPath?: string): Promise<CaidoConfig> {
-  const configFile = configPath || path.resolve(process.cwd(), DEFAULT_CONFIG_FILE);
+export async function loadConfig(cwd: string, configPath?: string): Promise<CaidoConfig> {
+  const configFile = configPath || path.resolve(cwd, DEFAULT_CONFIG_FILE);
+  logInfo(`Loading configuration: ${configFile}`);
   
   try {
     // Use jiti for dynamic imports
