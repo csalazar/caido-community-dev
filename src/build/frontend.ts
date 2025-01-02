@@ -1,5 +1,5 @@
 import path from 'path';
-import { defineConfig, UserConfig, build } from 'vite';
+import { defineConfig, build } from 'vite';
 import { existsSync } from 'fs';
 import type { FrontendBuildOutput, FrontendPluginConfig } from '../types';
 import { getPluginPackageJson } from '../package';
@@ -11,7 +11,7 @@ import { logInfo } from '../utils';
  * @param plugin - The frontend plugin configuration.
  * @returns The Vite config.
  */
-function createViteConfig(cwd: string, plugin: FrontendPluginConfig): UserConfig {
+function createViteConfig(cwd: string, plugin: FrontendPluginConfig) {
   // Set the entry point
   const root = path.resolve(cwd, plugin.root);
   return defineConfig({

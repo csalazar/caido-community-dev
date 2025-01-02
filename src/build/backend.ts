@@ -1,5 +1,5 @@
 import path from 'path';
-import { defineConfig, UserConfig, build } from 'vite';
+import { defineConfig, build, Options } from 'tsup';
 import type { BackendPluginConfig, BackendBuildOutput } from '../types';
 import { getPluginPackageJson } from '../package';
 import { logInfo } from '../utils';
@@ -10,25 +10,23 @@ import { logInfo } from '../utils';
  * @param plugin - The backend plugin configuration.
  * @returns The tsup config.
  */
-function createViteConfig(cwd: string, plugin: BackendPluginConfig): UserConfig {
-  // Set the entry point
+function createTsupConfig(cwd: string, plugin: BackendPluginConfig) {
+
   const root = path.resolve(cwd, plugin.root);
   return defineConfig({
-    root,
-    build: {
-      outDir: 'dist',
-      emptyOutDir: true,
-      lib: {
-        entry: 'src/index.ts',
-        formats: ['es'],
-        fileName: () => 'index.js',
-        cssFileName: 'index'
-      },
-      rollupOptions: {
-        external: ['@caido/frontend-sdk']
+    target: 'esnext',
+    entry: [path.resolve(root, 'src/index.ts')],
+    outDir: path.resolve(root, 'dist'),
+    outExtension: (ctx) => {
+      return {
+        js: '.js'
       }
-    }
-  })
+    },
+    format: ['esm'],
+    config: false,
+    clean: true,
+    sourcemap: false,
+  }) as Options;
 } 
 
 /**
@@ -41,8 +39,8 @@ export async function buildBackendPlugin(cwd: string, pluginConfig: BackendPlugi
     const pluginRoot = path.resolve(cwd, pluginConfig.root);
 
     logInfo(`Building backend plugin: ${pluginRoot}`);
-    const viteConfig = createViteConfig(cwd, pluginConfig);
-    await build(viteConfig);
+    const tsupConfig = createTsupConfig(cwd, pluginConfig);
+    await build(tsupConfig);
 
     const packageJson = getPluginPackageJson(pluginRoot);
 
