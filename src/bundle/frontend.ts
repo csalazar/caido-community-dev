@@ -1,4 +1,4 @@
-import { BuildOutput } from "../types";
+import { FrontendBuildOutput } from "../types";
 import path from "path";
 import fs from "fs";
 import { defineFrontendPluginManifest } from "../manifest";
@@ -8,7 +8,7 @@ import { defineFrontendPluginManifest } from "../manifest";
  * @param pluginPackageDir - The directory to bundle the plugin into.
  * @param buildOutput - The build output.
  */
-export function bundleFrontendPlugin(pluginPackageDir: string, buildOutput: Extract<BuildOutput, { kind: "frontend" }>) {
+export function bundleFrontendPlugin(pluginPackageDir: string, buildOutput: FrontendBuildOutput) {
   // Create plugin directory
   const pluginDir = path.join(pluginPackageDir, buildOutput.id);
   fs.mkdirSync(pluginDir, { recursive: true });

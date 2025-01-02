@@ -31,7 +31,6 @@ export const frontendPluginConfigSchema = z.strictObject({
 
 export const backendPluginConfigSchema = z.strictObject({
   kind: z.literal('backend'),
-  id: z.string(),
   name: z.string().nullable().optional(),
   root: z.string(),
 });

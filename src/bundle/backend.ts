@@ -1,4 +1,4 @@
-import { BuildOutput } from "../types";
+import { BackendBuildOutput } from "../types";
 import path from "path";
 import fs from "fs";
 import { defineBackendPluginManifest } from "../manifest";
@@ -8,7 +8,7 @@ import { defineBackendPluginManifest } from "../manifest";
  * @param pluginPackageDir - The directory to bundle the plugin into.
  * @param buildOutput - The build output.
  */
-export function bundleBackendPlugin(pluginPackageDir: string, buildOutput: Extract<BuildOutput, { kind: "backend" }>) {
+export function bundleBackendPlugin(pluginPackageDir: string, buildOutput: BackendBuildOutput) {
   // Create plugin directory
   const pluginDir = path.join(pluginPackageDir, buildOutput.id);
   fs.mkdirSync(pluginDir, { recursive: true });
