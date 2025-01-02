@@ -22,3 +22,7 @@ export function createManifest(options: {
 export function defineFrontendPluginManifest(pluginManifest: Extract<ManifestPlugin, { kind: 'frontend' }>) {
     return pluginManifest;
 }
+
+export function defineBackendPluginManifest(pluginManifest: Extract<ManifestPlugin, { kind: "backend" }>) {
+    return pluginManifest;
+}

@@ -7,6 +7,7 @@ import type { BuildOutput } from '../types';
 import JSZip from 'jszip';
 import { addDirectoryToZip, logInfo } from '../utils';
 import { bundleFrontendPlugin } from './frontend';
+import { bundleBackendPlugin } from "./backend";
 
 /**
  * Creates the dist directories.
@@ -47,9 +48,13 @@ export async function bundlePackage(options: {
 
   // Copy build outputs to dist directory
   for (const buildOutput of buildOutputs) {
-    if (buildOutput.kind === 'frontend') {
-      const pluginManifest = bundleFrontendPlugin(pluginPackageDir, buildOutput);
-      manifest.plugins.push(pluginManifest);
+    switch (buildOutput.kind) {
+      case "frontend":
+        manifest.plugins.push(bundleFrontendPlugin(pluginPackageDir, buildOutput));
+        break;
+      case "backend":
+        manifest.plugins.push(bundleBackendPlugin(pluginPackageDir, buildOutput));
+        break;
     }
   }
 

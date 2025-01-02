@@ -1,17 +1,16 @@
 import path from 'path';
 import { defineConfig, UserConfig, build } from 'vite';
-import { existsSync } from 'fs';
-import type { FrontendBuildOutput, FrontendPluginConfig } from '../types';
+import type { BackendPluginConfig, BackendBuildOutput } from '../types';
 import { getPluginPackageJson } from '../package';
 import { logInfo } from '../utils';
 
 /**
- * Creates a Vite config for the frontend plugin.
+ * Creates a tsup config for the backend plugin.
  * @param cwd - The current working directory.
- * @param plugin - The frontend plugin configuration.
- * @returns The Vite config.
+ * @param plugin - The backend plugin configuration.
+ * @returns The tsup config.
  */
-function createViteConfig(cwd: string, plugin: FrontendPluginConfig): UserConfig {
+function createViteConfig(cwd: string, plugin: BackendPluginConfig): UserConfig {
   // Set the entry point
   const root = path.resolve(cwd, plugin.root);
   return defineConfig({
@@ -33,29 +32,26 @@ function createViteConfig(cwd: string, plugin: FrontendPluginConfig): UserConfig
 } 
 
 /**
- * Builds the frontend plugin.
+ * Builds the backend plugin.
  * @param cwd - The current working directory.
- * @param pluginConfig - The frontend plugin configuration.
+ * @param pluginConfig - The backend plugin configuration.
  * @returns The build output.
  */
-export async function buildFrontendPlugin(cwd: string, pluginConfig: FrontendPluginConfig): Promise<FrontendBuildOutput> {
+export async function buildBackendPlugin(cwd: string, pluginConfig: BackendPluginConfig): Promise<BackendBuildOutput> {
     const pluginRoot = path.resolve(cwd, pluginConfig.root);
 
-    logInfo(`Building frontend plugin: ${pluginRoot}`);
+    logInfo(`Building backend plugin: ${pluginRoot}`);
     const viteConfig = createViteConfig(cwd, pluginConfig);
     await build(viteConfig);
 
-    const hasCss = existsSync(`${pluginRoot}/dist/index.css`);
     const packageJson = getPluginPackageJson(pluginRoot);
 
-    logInfo(`Frontend plugin built successfully`);
+    logInfo(`Frontend backend built successfully`);
 
     return {
-      kind: 'frontend',
+      kind: 'backend',
       id: packageJson.name,
       name: pluginConfig.name ?? packageJson.name,
       fileName: path.join(pluginRoot, 'dist', 'index.js'),
-      cssFileName: hasCss ? path.join(pluginRoot, 'dist', 'index.css') : undefined,
-      backendId: pluginConfig.backend?.id
     }
 }

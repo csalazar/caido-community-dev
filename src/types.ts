@@ -9,7 +9,14 @@ export type FrontendBuildOutput = {
   backendId: string | undefined;
 }
 
-export type BuildOutput = FrontendBuildOutput;
+export type BackendBuildOutput = {
+    kind: 'backend';
+    id: string;
+    name: string;
+    fileName: string;
+}
+
+export type BuildOutput = FrontendBuildOutput | BackendBuildOutput;
 
 export const backendReferenceConfigSchema = z.strictObject({
   id: z.string(),
@@ -26,7 +33,7 @@ export const backendPluginConfigSchema = z.strictObject({
   kind: z.literal('backend'),
   id: z.string(),
   name: z.string().nullable().optional(),
-  entry: z.string(),
+  root: z.string(),
 });
 
 export const workflowPluginConfigSchema = z.strictObject({
