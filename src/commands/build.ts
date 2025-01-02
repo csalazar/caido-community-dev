@@ -1,9 +1,8 @@
-import chalk from 'chalk';
 import { loadConfig } from '../config';
 import { bundlePackage } from '../bundle';
 import { getRootPackageJson } from '../package';
 import { buildFrontendPlugin } from '../build/frontend';
-import { BuildOutput } from '../types';
+import type { BuildOutput } from '../types';
 import { logInfo, logSuccess } from '../utils';
 
 export async function build(options: {

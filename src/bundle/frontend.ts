@@ -3,6 +3,11 @@ import path from "path";
 import fs from "fs";
 import { defineFrontendPluginManifest } from "../manifest";
 
+/**
+ * Bundles the frontend plugin
+ * @param pluginPackageDir - The directory to bundle the plugin into.
+ * @param buildOutput - The build output.
+ */
 export function bundleFrontendPlugin(pluginPackageDir: string, buildOutput: BuildOutput) {
   // Create plugin directory
   const pluginDir = path.join(pluginPackageDir, buildOutput.id);

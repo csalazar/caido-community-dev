@@ -1,5 +1,5 @@
 import type { Manifest, ManifestPlugin } from '@caido/plugin-manifest';
-import { RootPackageJson } from './package';
+import { RootPackageJson } from './types';
 
 export function createManifest(options: {
     packageJson: RootPackageJson
