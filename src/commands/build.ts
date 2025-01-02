@@ -1,9 +1,8 @@
-import chalk from 'chalk';
 import { loadConfig } from '../config';
 import { bundlePackage } from '../bundle';
 import { getRootPackageJson } from '../package';
-import { buildFrontendPlugin } from '../build/frontend';
-import { BuildOutput } from '../types';
+import { buildFrontendPlugin, buildBackendPlugin } from '../build';
+import type { BuildOutput } from '../types';
 import { logInfo, logSuccess } from '../utils';
 
 export async function build(options: {
@@ -21,8 +20,10 @@ export async function build(options: {
     for (const plugin of config.plugins) {
       switch (plugin.kind) {
         case 'frontend':
-          const output = await buildFrontendPlugin(cwd, plugin);
-          buildOutputs.push(output);
+          buildOutputs.push(await buildFrontendPlugin(cwd, plugin));
+          break;
+        case 'backend':
+          buildOutputs.push(await buildBackendPlugin(cwd, plugin));
           break;
       }
     }

@@ -5,6 +5,11 @@ import chalk from 'chalk';
 
 const program = new Command();
 
+/**
+ * Creates a runner function for a command, that handles errors and exits the process with a non-zero exit code.
+ * @param fn - The function to run.
+ * @returns The runner function.
+ */
 function runner(fn: (...args: any[]) => Promise<void>) {
     return async (...args: any[]) => {
         try {

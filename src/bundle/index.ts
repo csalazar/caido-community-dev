@@ -1,13 +1,19 @@
 import path from 'path';
 import fs from 'fs/promises';
 import { validateManifest } from '@caido/plugin-manifest';
-import { createManifest, defineFrontendPluginManifest } from '../manifest';
-import { RootPackageJson } from '../package';
-import { BuildOutput } from '../types';
+import { createManifest } from '../manifest';
+import { RootPackageJson } from '../types';
+import type { BuildOutput } from '../types';
 import JSZip from 'jszip';
 import { addDirectoryToZip, logInfo } from '../utils';
 import { bundleFrontendPlugin } from './frontend';
+import { bundleBackendPlugin } from "./backend";
 
+/**
+ * Creates the dist directories.
+ * @param cwd - The current working directory.
+ * @returns The dist directory and the plugin package directory.
+ */
 async function createDistDirectories(cwd: string) {
   const distDir = path.resolve(cwd, 'dist');
   await fs.rm(distDir, { recursive: true, force: true });
@@ -18,6 +24,14 @@ async function createDistDirectories(cwd: string) {
   return { distDir, pluginPackageDir };
 }
 
+/**
+ * Bundles the plugin package.
+ * @param options - The options.
+ * @param options.cwd - The current working directory.
+ * @param options.packageJson - The root package.json.
+ * @param options.buildOutputs - The build outputs.
+ * @returns The plugin package.
+ */
 export async function bundlePackage(options: {
     cwd: string,
     packageJson: RootPackageJson,
@@ -34,9 +48,13 @@ export async function bundlePackage(options: {
 
   // Copy build outputs to dist directory
   for (const buildOutput of buildOutputs) {
-    if (buildOutput.kind === 'frontend') {
-      const pluginManifest = bundleFrontendPlugin(pluginPackageDir, buildOutput);
-      manifest.plugins.push(pluginManifest);
+    switch (buildOutput.kind) {
+      case "frontend":
+        manifest.plugins.push(bundleFrontendPlugin(pluginPackageDir, buildOutput));
+        break;
+      case "backend":
+        manifest.plugins.push(bundleBackendPlugin(pluginPackageDir, buildOutput));
+        break;
     }
   }
 
