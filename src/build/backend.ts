@@ -3,6 +3,7 @@ import { defineConfig, build, Options } from 'tsup';
 import type { BackendPluginConfig, BackendBuildOutput } from '../types';
 import { getPluginPackageJson } from '../package';
 import { logInfo } from '../utils';
+import { builtinModules } from 'module';
 
 /**
  * Creates a tsup config for the backend plugin.
@@ -26,6 +27,9 @@ function createTsupConfig(cwd: string, plugin: BackendPluginConfig) {
     config: false,
     clean: true,
     sourcemap: false,
+    external: [/caido:.+/, ...builtinModules],
+
+
   }) as Options;
 } 
 
