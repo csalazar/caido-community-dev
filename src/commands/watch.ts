@@ -34,6 +34,7 @@ export async function watch(options: {
 
         const message: ConnectedMessage = {
             kind: 'connected',
+            packageId: config.id,
             downloadUrl,
         };
 

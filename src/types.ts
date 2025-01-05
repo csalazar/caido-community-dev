@@ -84,6 +84,7 @@ export type CaidoConfig = z.infer<typeof caidoConfigSchema>;
 
 export type ConnectedMessage = {
     kind: 'connected';
+    packageId: string;
     downloadUrl: string;
 }
 
