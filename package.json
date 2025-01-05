@@ -1,8 +1,11 @@
 {
   "name": "@caido-community/dev",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Development tools for building Caido plugins",
   "type": "module",
+  "exports": {
+    ".": "./dist/index.js"
+  },
   "bin": {
     "caido-dev": "./dist/cli.js"
   },
@@ -32,19 +35,21 @@
     "express": "5.0.0",
     "jiti": "2.4.2",
     "jszip": "3.10.1",
-    "tsup": "8.3.5",
-    "vite": "6.0.6",
-    "vitest": "2.1.8",
     "ws": "8.18.0",
     "zod": "3.24.1"
+  },
+  "peerDependencies": {
+    "vite": "^6.0.0",
+    "tsup": "^8.0.0"
   },
   "devDependencies": {
     "@types/express": "5.0.0",
     "@types/node": "22.10.2",
     "@types/ws": "8.5.13",
-    "prettier": "3.4.2",
     "tsup": "8.3.5",
     "tsx": "4.19.2",
-    "typescript": "5.7.2"
+    "typescript": "5.7.2",
+    "vitest": "2.1.8",
+    "vite": "6.0.6"
   }
 }

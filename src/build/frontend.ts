@@ -1,8 +1,7 @@
 import path from 'path';
-import { defineConfig, build } from 'vite';
+import { defineConfig, build, mergeConfig } from 'vite';
 import { existsSync } from 'fs';
 import type { FrontendBuildOutput, FrontendPluginConfig } from '../types';
-import { getPluginPackageJson } from '../package';
 import { logInfo } from '../utils';
 
 /**
@@ -14,7 +13,7 @@ import { logInfo } from '../utils';
 function createViteConfig(cwd: string, plugin: FrontendPluginConfig) {
   // Set the entry point
   const root = path.resolve(cwd, plugin.root);
-  return defineConfig({
+  const baseConfig = defineConfig({
     root,
     build: {
       outDir: 'dist',
@@ -25,11 +24,13 @@ function createViteConfig(cwd: string, plugin: FrontendPluginConfig) {
         fileName: () => 'index.js',
         cssFileName: 'index'
       },
-      rollupOptions: {
-        external: ['@caido/frontend-sdk']
-      }
+    },
+    define: {
+      'process.env.NODE_ENV': '"production"'
     }
   })
+
+  return mergeConfig(baseConfig, plugin.vite ?? {});
 } 
 
 /**
@@ -46,14 +47,12 @@ export async function buildFrontendPlugin(cwd: string, pluginConfig: FrontendPlu
     await build(viteConfig);
 
     const hasCss = existsSync(`${pluginRoot}/dist/index.css`);
-    const packageJson = getPluginPackageJson(pluginRoot);
-
     logInfo(`Frontend plugin built successfully`);
 
     return {
       kind: 'frontend',
-      id: packageJson.name,
-      name: pluginConfig.name ?? packageJson.name,
+      id: pluginConfig.id,
+      name: pluginConfig.name ?? "frontend",
       fileName: path.join(pluginRoot, 'dist', 'index.js'),
       cssFileName: hasCss ? path.join(pluginRoot, 'dist', 'index.css') : undefined,
       backendId: pluginConfig.backend?.id

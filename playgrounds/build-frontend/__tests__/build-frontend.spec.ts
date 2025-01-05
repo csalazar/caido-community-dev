@@ -11,21 +11,21 @@ describe('build-frontend', () => {
 
     expect(manifestJsonContent).toEqual(JSON.stringify({
       "id": "build-frontend",
-      "name": "build-frontend",
+      "name": "Frontend",
       "version": "1.0.0",
-      "description": "",
+      "description": "Frontend plugin",
       "author": {
-        "name": "Caido Labs Inc.",
-        "email": "hello@caido.com",
-        "url": "https://caido.com"
+        "name": "John Doe",
+        "email": "john.doe@example.com",
+        "url": "https://example.com"
       },
       "plugins": [
         {
           "id": "frontend",
           "kind": "frontend",
           "name": "frontend",
-          "js": "frontend/index.js",
-          "css": "frontend/index.css",
+          "entrypoint": "frontend/index.js",
+          "style": "frontend/index.css",
           "backend": null
         }
       ]
