@@ -29,6 +29,12 @@ importers:
       jszip:
         specifier: 3.10.1
         version: 3.10.1
+      tsup:
+        specifier: 8.3.5
+        version: 8.3.5(jiti@2.4.2)(postcss@8.4.49)(tsx@4.19.2)(typescript@5.7.2)
+      vite:
+        specifier: 6.0.7
+        version: 6.0.7(@types/node@22.10.2)(jiti@2.4.2)(tsx@4.19.2)
       ws:
         specifier: 8.18.0
         version: 8.18.0
@@ -45,18 +51,12 @@ importers:
       '@types/ws':
         specifier: 8.5.13
         version: 8.5.13
-      tsup:
-        specifier: 8.3.5
-        version: 8.3.5(jiti@2.4.2)(postcss@8.4.49)(tsx@4.19.2)(typescript@5.7.2)
       tsx:
         specifier: 4.19.2
         version: 4.19.2
       typescript:
         specifier: 5.7.2
         version: 5.7.2
-      vite:
-        specifier: 6.0.6
-        version: 6.0.6(@types/node@22.10.2)(jiti@2.4.2)(tsx@4.19.2)
       vitest:
         specifier: 2.1.8
         version: 2.1.8(@types/node@22.10.2)
@@ -1497,8 +1497,8 @@ packages:
       terser:
         optional: true
 
-  vite@6.0.6:
-    resolution: {integrity: sha512-NSjmUuckPmDU18bHz7QZ+bTYhRR0iA72cs2QAxCqDpafJ0S6qetco0LB3WW2OxlMHS0JmAv+yZ/R3uPmMyGTjQ==}
+  vite@6.0.7:
+    resolution: {integrity: sha512-RDt8r/7qx9940f8FcOIAH9PTViRrghKaK2K1jY3RaAURrEUbm9Du1mJ72G+jlhtG3WwodnfzY8ORQZbBavZEAQ==}
     engines: {node: ^18.0.0 || ^20.0.0 || >=22.0.0}
     hasBin: true
     peerDependencies:
@@ -2847,7 +2847,7 @@ snapshots:
       '@types/node': 22.10.2
       fsevents: 2.3.3
 
-  vite@6.0.6(@types/node@22.10.2)(jiti@2.4.2)(tsx@4.19.2):
+  vite@6.0.7(@types/node@22.10.2)(jiti@2.4.2)(tsx@4.19.2):
     dependencies:
       esbuild: 0.24.2
       postcss: 8.4.49
