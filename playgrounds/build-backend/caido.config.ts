@@ -13,6 +13,6 @@ export default {
       kind: "backend",
       id: "backend",
       root: "./packages/backend",
-    }
+    },
   ],
 };

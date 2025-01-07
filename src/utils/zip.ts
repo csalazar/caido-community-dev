@@ -1,6 +1,7 @@
-import JSZip from 'jszip';
-import { readdir, stat, readFile } from 'fs/promises';
-import { join } from 'path';
+import { readdir, readFile, stat } from "fs/promises";
+import { join } from "path";
+
+import type JSZip from "jszip";
 
 /**
  * Recursively adds files from a directory to a JSZip object
@@ -11,7 +12,7 @@ import { join } from 'path';
 export async function addDirectoryToZip(
   zip: JSZip,
   dirPath: string,
-  parentPath: string = ''
+  parentPath: string = "",
 ) {
   const entries = await readdir(dirPath);
 

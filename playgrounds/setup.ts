@@ -1,8 +1,9 @@
-import { execSync } from 'child_process';
-import path from 'path';
-import { afterAll, beforeAll, expect } from 'vitest';
+import { execSync } from "child_process";
+import path from "path";
 
-beforeAll(async ({ file }) => {
+import { afterAll, beforeAll, expect } from "vitest";
+
+beforeAll(({ file }) => {
   // Get the test file path from the current test file
   const testPath = file.filepath;
 
@@ -11,13 +12,13 @@ beforeAll(async ({ file }) => {
 
   // Installing the dependencies
   console.log(`Installing dependencies in ${playgroundDir}...`);
-  execSync('pnpm install', {
+  execSync("pnpm install", {
     cwd: playgroundDir,
   });
 
   // Run pnpm build in the playground directory
   console.log(`Building playground in ${playgroundDir}...`);
-  execSync('node ../../dist/cli.js build', {
+  execSync("node ../../dist/cli.js build", {
     cwd: playgroundDir,
   });
 });

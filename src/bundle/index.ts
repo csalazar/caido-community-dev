@@ -1,12 +1,15 @@
-import path from 'path';
-import fs from 'fs/promises';
-import { validateManifest } from '@caido/plugin-manifest';
-import { createManifest } from '../manifest';
-import type { BuildOutput, CaidoConfig } from '../types';
-import JSZip from 'jszip';
-import { addDirectoryToZip, logInfo, logSuccess } from '../utils';
-import { bundleFrontendPlugin } from './frontend';
+import fs from "fs/promises";
+import path from "path";
+
+import { validateManifest } from "@caido/plugin-manifest";
+import JSZip from "jszip";
+
+import { createManifest } from "../manifest";
+import type { BuildOutput, CaidoConfig } from "../types";
+import { addDirectoryToZip, logInfo, logSuccess } from "../utils";
+
 import { bundleBackendPlugin } from "./backend";
+import { bundleFrontendPlugin } from "./frontend";
 
 /**
  * Creates the dist directories.
@@ -14,13 +17,19 @@ import { bundleBackendPlugin } from "./backend";
  * @returns The dist directory and the plugin package directory.
  */
 async function createDistDirectories(cwd: string) {
-  const distDir = path.resolve(cwd, 'dist');
-  await fs.rm(distDir, { recursive: true, force: true });
+  const distDir = path.resolve(cwd, "dist");
+  await fs.rm(distDir, {
+    recursive: true,
+    force: true,
+  });
 
-  const pluginPackageDir = path.join(distDir, 'plugin_package');
+  const pluginPackageDir = path.join(distDir, "plugin_package");
   await fs.mkdir(pluginPackageDir, { recursive: true });
 
-  return { distDir, pluginPackageDir };
+  return {
+    distDir,
+    pluginPackageDir,
+  };
 }
 
 /**
@@ -32,11 +41,11 @@ async function createDistDirectories(cwd: string) {
  * @returns The plugin package.
  */
 export async function bundlePackage(options: {
-    cwd: string,
-    buildOutputs: BuildOutput[],
-    config: CaidoConfig
+  cwd: string;
+  buildOutputs: BuildOutput[];
+  config: CaidoConfig;
 }): Promise<void> {
-  logInfo('Bundling plugin package');
+  logInfo("Bundling plugin package");
   const { cwd, buildOutputs, config } = options;
 
   // Create dist directories
@@ -49,21 +58,27 @@ export async function bundlePackage(options: {
   for (const buildOutput of buildOutputs) {
     switch (buildOutput.kind) {
       case "frontend":
-        manifest.plugins.push(bundleFrontendPlugin(pluginPackageDir, buildOutput));
+        manifest.plugins.push(
+          bundleFrontendPlugin(pluginPackageDir, buildOutput),
+        );
         break;
       case "backend":
-        manifest.plugins.push(bundleBackendPlugin(pluginPackageDir, buildOutput));
+        manifest.plugins.push(
+          bundleBackendPlugin(pluginPackageDir, buildOutput),
+        );
         break;
     }
   }
 
-  // Assert that the manifest is valid  
+  // Assert that the manifest is valid
   if (!validateManifest(manifest)) {
-    throw new Error('Manifest is not valid:' + JSON.stringify(manifest, null, 2));
+    throw new Error(
+      "Manifest is not valid:" + JSON.stringify(manifest, null, 2),
+    );
   }
 
   // Write manifest to dist directory
-  const manifestPath = path.join(pluginPackageDir, 'manifest.json');
+  const manifestPath = path.join(pluginPackageDir, "manifest.json");
   const manifestContent = JSON.stringify(manifest, null, 2);
   await fs.writeFile(manifestPath, manifestContent);
 
@@ -74,11 +89,15 @@ export async function bundlePackage(options: {
   await addDirectoryToZip(zip, pluginPackageDir);
 
   // Write zip file to dist directory
-  const zipPath = path.join(distDir, 'plugin_package.zip');
-  const zipFile = await fs.open(zipPath, 'w');
-  zip.generateNodeStream({ type: 'nodebuffer', streamFiles: true })
+  const zipPath = path.join(distDir, "plugin_package.zip");
+  const zipFile = await fs.open(zipPath, "w");
+  zip
+    .generateNodeStream({
+      type: "nodebuffer",
+      streamFiles: true,
+    })
     .pipe(zipFile.createWriteStream())
-    .on('finish', () => {
-      logSuccess('Plugin package zip file created successfully');
+    .on("finish", () => {
+      logSuccess("Plugin package zip file created successfully");
     });
-} 
+}

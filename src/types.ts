@@ -1,32 +1,30 @@
-import { UserConfig as ViteConfig } from "vite";
+import { type UserConfig as ViteConfig } from "vite";
 import { z } from "zod";
 
 export type FrontendBuildOutput = {
-  kind: 'frontend';
+  kind: "frontend";
   id: string;
   name: string;
   fileName: string;
   cssFileName: string | undefined;
   backendId: string | undefined;
-}
+};
 
 export type BackendBuildOutput = {
-    kind: 'backend';
-    id: string;
-    name: string;
-    fileName: string;
-}
+  kind: "backend";
+  id: string;
+  name: string;
+  fileName: string;
+};
 
 export type BuildOutput = FrontendBuildOutput | BackendBuildOutput;
 
-export const backendReferenceConfigSchema = z.strictObject({
-  id: z.string(),
-});
+export const backendReferenceConfigSchema = z.strictObject({ id: z.string() });
 
 const viteSchema: z.ZodType<ViteConfig> = z.record(z.string(), z.unknown());
 
 export const frontendPluginConfigSchema = z.strictObject({
-  kind: z.literal('frontend'),
+  kind: z.literal("frontend"),
   id: z.string(),
   name: z.string().optional(),
   root: z.string(),
@@ -35,14 +33,14 @@ export const frontendPluginConfigSchema = z.strictObject({
 });
 
 export const backendPluginConfigSchema = z.strictObject({
-  kind: z.literal('backend'),
+  kind: z.literal("backend"),
   id: z.string(),
   name: z.string().optional(),
   root: z.string(),
 });
 
 export const workflowPluginConfigSchema = z.strictObject({
-  kind: z.literal('workflow'),
+  kind: z.literal("workflow"),
   id: z.string(),
   name: z.string(),
   root: z.string(),
@@ -59,41 +57,42 @@ export const caidoConfigSchema = z.strictObject({
   description: z.string(),
   version: z.string().regex(/^\d+\.\d+\.\d+$/),
   author: z.object({
-      name: z.string(),
-      email: z.string().email().optional(),
-      url: z.string().url().optional(),
+    name: z.string(),
+    email: z.string().email().optional(),
+    url: z.string().url().optional(),
   }),
   plugins: z.array(
-    z.discriminatedUnion('kind', [
+    z.discriminatedUnion("kind", [
       frontendPluginConfigSchema,
       backendPluginConfigSchema,
       workflowPluginConfigSchema,
-    ])
+    ]),
   ),
   watch: watchConfigSchema.optional(),
 });
 
 // Type inference
-export type BackendReferenceConfig = z.infer<typeof backendReferenceConfigSchema>;
+export type BackendReferenceConfig = z.infer<
+  typeof backendReferenceConfigSchema
+>;
 export type FrontendPluginConfig = z.infer<typeof frontendPluginConfigSchema>;
 export type BackendPluginConfig = z.infer<typeof backendPluginConfigSchema>;
 export type WorkflowPluginConfig = z.infer<typeof workflowPluginConfigSchema>;
 export type WatchConfig = z.infer<typeof watchConfigSchema>;
-export type CaidoConfig = z.infer<typeof caidoConfigSchema>; 
-
+export type CaidoConfig = z.infer<typeof caidoConfigSchema>;
 
 export type ConnectedMessage = {
-    kind: 'connected';
-    packageId: string;
-    downloadUrl: string;
-}
+  kind: "connected";
+  packageId: string;
+  downloadUrl: string;
+};
 
 export type RebuildMessage = {
-    kind: 'rebuild';
-    downloadUrl: string;
-}
+  kind: "rebuild";
+  downloadUrl: string;
+};
 
 export type ErrorMessage = {
-    kind: 'error';
-    error: string;
-}
+  kind: "error";
+  error: string;
+};

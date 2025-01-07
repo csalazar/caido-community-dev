@@ -1,14 +1,18 @@
-import { FrontendBuildOutput } from "../types";
-import path from "path";
 import fs from "fs";
+import path from "path";
+
 import { defineFrontendPluginManifest } from "../manifest";
+import { type FrontendBuildOutput } from "../types";
 
 /**
  * Bundles the frontend plugin
  * @param pluginPackageDir - The directory to bundle the plugin into.
  * @param buildOutput - The build output.
  */
-export function bundleFrontendPlugin(pluginPackageDir: string, buildOutput: FrontendBuildOutput) {
+export function bundleFrontendPlugin(
+  pluginPackageDir: string,
+  buildOutput: FrontendBuildOutput,
+) {
   // Create plugin directory
   const pluginDir = path.join(pluginPackageDir, buildOutput.id);
   fs.mkdirSync(pluginDir, { recursive: true });
@@ -19,21 +23,22 @@ export function bundleFrontendPlugin(pluginPackageDir: string, buildOutput: Fron
   const jsRelativePath = path.relative(pluginPackageDir, jsDestPath);
 
   // Copy CSS file if it exists
-  let cssRelativePath: string | null = null;
+  let cssRelativePath: string | undefined;
   if (buildOutput.cssFileName) {
-    const cssDestPath = path.join(pluginDir, path.basename(buildOutput.cssFileName));
+    const cssDestPath = path.join(
+      pluginDir,
+      path.basename(buildOutput.cssFileName),
+    );
     fs.copyFileSync(buildOutput.cssFileName, cssDestPath);
     cssRelativePath = path.relative(pluginPackageDir, cssDestPath);
   }
 
   return defineFrontendPluginManifest({
     id: buildOutput.id,
-    kind: 'frontend',
+    kind: "frontend",
     name: buildOutput.name ?? buildOutput.id,
     entrypoint: jsRelativePath,
     style: cssRelativePath,
-    backend: buildOutput.backendId ? {
-      id: buildOutput.backendId,
-    } : null
+    backend: buildOutput.backendId ? { id: buildOutput.backendId } : null,
   });
 }
