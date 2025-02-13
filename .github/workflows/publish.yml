@@ -41,5 +41,4 @@ jobs:
         shell: bash
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: |
-          pnpm -r publish --access public
+        run: pnpm --filter dev -r publish --access public
