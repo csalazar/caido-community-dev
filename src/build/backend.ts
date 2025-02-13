@@ -51,5 +51,6 @@ export async function buildBackendPlugin(
     id: pluginConfig.id,
     name: pluginConfig.name ?? "backend",
     fileName: path.join(pluginRoot, "dist", "index.js"),
+    assets: pluginConfig.assets ?? [],
   };
 }

@@ -8,6 +8,7 @@ export type FrontendBuildOutput = {
   fileName: string;
   cssFileName: string | undefined;
   backendId: string | undefined;
+  assets: string[];
 };
 
 export type BackendBuildOutput = {
@@ -15,6 +16,7 @@ export type BackendBuildOutput = {
   id: string;
   name: string;
   fileName: string;
+  assets: string[];
 };
 
 export type BuildOutput = FrontendBuildOutput | BackendBuildOutput;
@@ -23,11 +25,14 @@ export const backendReferenceConfigSchema = z.strictObject({ id: z.string() });
 
 const viteSchema: z.ZodType<ViteConfig> = z.record(z.string(), z.unknown());
 
+export const assetsConfigSchema = z.array(z.string()).optional();
+
 export const frontendPluginConfigSchema = z.strictObject({
   kind: z.literal("frontend"),
   id: z.string(),
   name: z.string().optional(),
   root: z.string(),
+  assets: assetsConfigSchema,
   backend: backendReferenceConfigSchema.nullable().optional(),
   vite: viteSchema.optional(),
 });
@@ -37,6 +42,7 @@ export const backendPluginConfigSchema = z.strictObject({
   id: z.string(),
   name: z.string().optional(),
   root: z.string(),
+  assets: assetsConfigSchema,
 });
 
 export const workflowPluginConfigSchema = z.strictObject({
@@ -45,6 +51,10 @@ export const workflowPluginConfigSchema = z.strictObject({
   name: z.string(),
   root: z.string(),
   definition: z.string(),
+});
+
+export const linksConfigSchema = z.strictObject({
+  sponsor: z.string().url().optional(),
 });
 
 export const watchConfigSchema = z.strictObject({
@@ -61,6 +71,7 @@ export const caidoConfigSchema = z.strictObject({
     email: z.string().email().optional(),
     url: z.string().url().optional(),
   }),
+  links: linksConfigSchema.optional(),
   plugins: z.array(
     z.discriminatedUnion("kind", [
       frontendPluginConfigSchema,

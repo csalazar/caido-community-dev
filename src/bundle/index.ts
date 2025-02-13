@@ -59,12 +59,12 @@ export async function bundlePackage(options: {
     switch (buildOutput.kind) {
       case "frontend":
         manifest.plugins.push(
-          bundleFrontendPlugin(pluginPackageDir, buildOutput),
+          bundleFrontendPlugin(cwd, pluginPackageDir, buildOutput),
         );
         break;
       case "backend":
         manifest.plugins.push(
-          bundleBackendPlugin(pluginPackageDir, buildOutput),
+          bundleBackendPlugin(cwd, pluginPackageDir, buildOutput),
         );
         break;
     }

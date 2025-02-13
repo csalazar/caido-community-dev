@@ -25,6 +25,7 @@ describe("build-backend", () => {
             email: "john.doe@example.com",
             url: "https://example.com",
           },
+          links: {},
           plugins: [
             {
               id: "backend",
@@ -32,6 +33,7 @@ describe("build-backend", () => {
               name: "backend",
               entrypoint: "backend/index.js",
               runtime: "javascript",
+              assets: "backend/assets",
             },
           ],
         },
@@ -58,5 +60,27 @@ describe("build-backend", () => {
     `.replace(/\s+/g, "");
 
     expect(indexJsContent).toEqual(expectedContent);
+  });
+
+  it("should have asset txt", async () => {
+    const zipPath = path.resolve(__dirname, "../dist/plugin_package.zip");
+
+    const assetContent = await getZipFileContent(
+      zipPath,
+      "backend/assets/test.txt",
+    );
+
+    expect(assetContent).toEqual("Hello world");
+  });
+
+  it("should not have asset bin", async () => {
+    const zipPath = path.resolve(__dirname, "../dist/plugin_package.zip");
+
+    const assetContent = await getZipFileContent(
+      zipPath,
+      "backend/assets/other.bin",
+    );
+
+    expect(assetContent).toBeUndefined();
   });
 });

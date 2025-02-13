@@ -14,6 +14,9 @@ export function createManifest(options: { config: CaidoConfig }): Manifest {
       email: config.author?.email,
       url: config.author?.url,
     },
+    links: {
+      sponsor: config.links?.sponsor,
+    },
     plugins: [],
   };
 }

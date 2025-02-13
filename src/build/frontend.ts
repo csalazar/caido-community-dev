@@ -61,5 +61,6 @@ export async function buildFrontendPlugin(
       ? path.join(pluginRoot, "dist", "index.css")
       : undefined,
     backendId: pluginConfig.backend?.id,
+    assets: pluginConfig.assets ?? [],
   };
 }

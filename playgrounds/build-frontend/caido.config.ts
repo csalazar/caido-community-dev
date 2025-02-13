@@ -13,6 +13,7 @@ export default {
       kind: "frontend",
       id: "frontend",
       root: "./packages/frontend",
+      assets: ["./assets"],
     },
   ],
 };

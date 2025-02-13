@@ -25,6 +25,7 @@ describe("build-frontend", () => {
             email: "john.doe@example.com",
             url: "https://example.com",
           },
+          links: {},
           plugins: [
             {
               id: "frontend",
@@ -33,6 +34,7 @@ describe("build-frontend", () => {
               entrypoint: "frontend/index.js",
               style: "frontend/index.css",
               backend: null,
+              assets: "frontend/assets",
             },
           ],
         },
@@ -70,5 +72,27 @@ describe("build-frontend", () => {
     );
 
     expect(indexCssContent).toEqual("body{background-color:red}\n");
+  });
+
+  it("should have assets txt", async () => {
+    const zipPath = path.resolve(__dirname, "../dist/plugin_package.zip");
+
+    const assetContent = await getZipFileContent(
+      zipPath,
+      "frontend/assets/test.txt",
+    );
+
+    expect(assetContent).toEqual("Hello world");
+  });
+
+  it("should have assets recursive", async () => {
+    const zipPath = path.resolve(__dirname, "../dist/plugin_package.zip");
+
+    const assetContent = await getZipFileContent(
+      zipPath,
+      "frontend/assets/data/data.txt",
+    );
+
+    expect(assetContent).toEqual("My data");
   });
 });

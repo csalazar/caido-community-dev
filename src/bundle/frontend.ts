@@ -3,13 +3,14 @@ import path from "path";
 
 import { defineFrontendPluginManifest } from "../manifest";
 import { type FrontendBuildOutput } from "../types";
-
+import { cp } from "../utils";
 /**
  * Bundles the frontend plugin
  * @param pluginPackageDir - The directory to bundle the plugin into.
  * @param buildOutput - The build output.
  */
 export function bundleFrontendPlugin(
+  cwd: string,
   pluginPackageDir: string,
   buildOutput: FrontendBuildOutput,
 ) {
@@ -33,6 +34,21 @@ export function bundleFrontendPlugin(
     cssRelativePath = path.relative(pluginPackageDir, cssDestPath);
   }
 
+  // Copy assets if required
+  let assetsRelativePath: string | undefined;
+  if (buildOutput.assets.length > 0) {
+    // Create assets directory
+    const assetsDir = path.join(pluginDir, "assets");
+    fs.mkdirSync(assetsDir, { recursive: true });
+
+    // Copy assets
+    for (const asset of buildOutput.assets) {
+      cp(cwd, asset, assetsDir);
+    }
+
+    assetsRelativePath = path.relative(pluginPackageDir, assetsDir);
+  }
+
   return defineFrontendPluginManifest({
     id: buildOutput.id,
     kind: "frontend",
@@ -40,5 +56,6 @@ export function bundleFrontendPlugin(
     entrypoint: jsRelativePath,
     style: cssRelativePath,
     backend: buildOutput.backendId ? { id: buildOutput.backendId } : null,
+    assets: assetsRelativePath,
   });
 }
