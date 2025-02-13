@@ -12,7 +12,7 @@
   <hr />
 </div>
 
-# 🧑‍🏭 Dev
+# 👨‍🏭 Dev
 
 A development toolkit for building Caido plugins. This CLI tool simplifies the process of developing, building, and packaging Caido plugins.
 
