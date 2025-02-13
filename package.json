@@ -27,6 +27,10 @@
   ],
   "author": "Caido Labs",
   "license": "MIT",
+  "engines": {
+    "node": ">=20",
+    "pnpm": ">=9"
+  },
   "dependencies": {
     "@caido/plugin-manifest": "0.3.0",
     "chalk": "5.4.1",

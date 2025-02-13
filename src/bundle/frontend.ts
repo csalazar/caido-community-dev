@@ -3,7 +3,7 @@ import path from "path";
 
 import { defineFrontendPluginManifest } from "../manifest";
 import { type FrontendBuildOutput } from "../types";
-import { cp } from "../utils";
+import { cp, slash } from "../utils";
 /**
  * Bundles the frontend plugin
  * @param pluginPackageDir - The directory to bundle the plugin into.
@@ -21,7 +21,7 @@ export function bundleFrontendPlugin(
   // Copy JS file
   const jsDestPath = path.join(pluginDir, path.basename(buildOutput.fileName));
   fs.copyFileSync(buildOutput.fileName, jsDestPath);
-  const jsRelativePath = path.relative(pluginPackageDir, jsDestPath);
+  const jsRelativePath = slash(path.relative(pluginPackageDir, jsDestPath));
 
   // Copy CSS file if it exists
   let cssRelativePath: string | undefined;
@@ -31,7 +31,7 @@ export function bundleFrontendPlugin(
       path.basename(buildOutput.cssFileName),
     );
     fs.copyFileSync(buildOutput.cssFileName, cssDestPath);
-    cssRelativePath = path.relative(pluginPackageDir, cssDestPath);
+    cssRelativePath = slash(path.relative(pluginPackageDir, cssDestPath));
   }
 
   // Copy assets if required
@@ -46,7 +46,7 @@ export function bundleFrontendPlugin(
       cp(cwd, asset, assetsDir);
     }
 
-    assetsRelativePath = path.relative(pluginPackageDir, assetsDir);
+    assetsRelativePath = slash(path.relative(pluginPackageDir, assetsDir));
   }
 
   return defineFrontendPluginManifest({

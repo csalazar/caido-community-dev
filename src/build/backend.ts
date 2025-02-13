@@ -4,7 +4,7 @@ import path from "path";
 import { build, defineConfig, type Options } from "tsup";
 
 import type { BackendBuildOutput, BackendPluginConfig } from "../types";
-import { logInfo } from "../utils";
+import { logInfo, slash } from "../utils";
 
 /**
  * Creates a tsup config for the backend plugin.
@@ -16,8 +16,8 @@ function createTsupConfig(cwd: string, plugin: BackendPluginConfig) {
   const root = path.resolve(cwd, plugin.root);
   return defineConfig({
     target: "esnext",
-    entry: [path.resolve(root, "src/index.ts")],
-    outDir: path.resolve(root, "dist"),
+    entry: [slash(path.resolve(root, "src/index.ts"))],
+    outDir: slash(path.resolve(root, "dist")),
     outExtension: (ctx) => {
       return { js: ".js" };
     },

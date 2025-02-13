@@ -3,7 +3,7 @@ import path from "path";
 
 import { defineBackendPluginManifest } from "../manifest";
 import { type BackendBuildOutput } from "../types";
-import { cp } from "../utils";
+import { cp, slash } from "../utils";
 
 /**
  * Bundles the backend plugin
@@ -22,7 +22,7 @@ export function bundleBackendPlugin(
   // Copy JS file
   const jsDestPath = path.join(pluginDir, path.basename(buildOutput.fileName));
   fs.copyFileSync(buildOutput.fileName, jsDestPath);
-  const jsRelativePath = path.relative(pluginPackageDir, jsDestPath);
+  const jsRelativePath = slash(path.relative(pluginPackageDir, jsDestPath));
 
   // Copy assets if required
   let assetsRelativePath: string | undefined;
@@ -36,7 +36,7 @@ export function bundleBackendPlugin(
       cp(cwd, asset, assetsDir);
     }
 
-    assetsRelativePath = path.relative(pluginPackageDir, assetsDir);
+    assetsRelativePath = slash(path.relative(pluginPackageDir, assetsDir));
   }
 
   return defineBackendPluginManifest({
