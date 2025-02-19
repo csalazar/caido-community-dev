@@ -27,6 +27,10 @@ const viteSchema: z.ZodType<ViteConfig> = z.record(z.string(), z.unknown());
 
 export const assetsConfigSchema = z.array(z.string()).optional();
 
+export const tsupConfigSchema = z.strictObject({
+  external: z.array(z.string()).optional(),
+});
+
 export const frontendPluginConfigSchema = z.strictObject({
   kind: z.literal("frontend"),
   id: z.string(),
@@ -43,6 +47,7 @@ export const backendPluginConfigSchema = z.strictObject({
   name: z.string().optional(),
   root: z.string(),
   assets: assetsConfigSchema,
+  tsup: tsupConfigSchema.optional(),
 });
 
 export const workflowPluginConfigSchema = z.strictObject({

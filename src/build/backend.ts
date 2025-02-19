@@ -13,6 +13,8 @@ import { logInfo, slash } from "../utils";
  * @returns The tsup config.
  */
 function createTsupConfig(cwd: string, plugin: BackendPluginConfig) {
+  const userConfiguredExternal = plugin.tsup?.external || [];
+
   const root = path.resolve(cwd, plugin.root);
   return defineConfig({
     target: "esnext",
@@ -25,7 +27,7 @@ function createTsupConfig(cwd: string, plugin: BackendPluginConfig) {
     config: false,
     clean: true,
     sourcemap: false,
-    external: [/caido:.+/, ...builtinModules],
+    external: [/caido:.+/, ...builtinModules, ...userConfiguredExternal],
   }) as Options;
 }
 
